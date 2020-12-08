@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: blocksize
+
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: blocksize
+      SECRET: bl0cksrze__5623_sdkjWrew
+    ports:
+      - 50051:50051
+    command: sh -c 'while ! nc -z db 5432; do sleep 1; done; ./bin/blocksize-assignment'
+    restart: always
+
